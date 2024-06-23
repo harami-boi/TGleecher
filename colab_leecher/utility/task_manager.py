@@ -68,11 +68,6 @@ async def taskScheduler():
     )
     # Reset Texts
     Messages.download_name = ""
-    Messages.task_msg = f"<b>🦞 TASK MODE » </b>"
-    Messages.dump_task = (
-        Messages.task_msg
-        + f"<i>{BOT.Mode.type.capitalize()} {BOT.Mode.mode.capitalize()} as {BOT.Setting.stream_upload}</i>\n\n<b>🖇️ SOURCES » </b>"
-    )
     Transfer.sent_file = []
     Transfer.sent_file_names = []
     Transfer.down_bytes = [0, 0]
@@ -89,39 +84,10 @@ async def taskScheduler():
             return
         if not ospath.exists(Paths.temp_dirleech_path):
             makedirs(Paths.temp_dirleech_path)
-        Messages.dump_task += f"\n\n📂 <code>{BOT.SOURCE[0]}</code>"
         Transfer.total_down_size = getSize(BOT.SOURCE[0])
         Messages.download_name = ospath.basename(BOT.SOURCE[0])
     else:
-        for link in BOT.SOURCE:
-            if is_telegram(link):
-                ida = "💬"
-            elif is_google_drive(link):
-                ida = "♻️"
-            elif is_torrent(link):
-                ida = "🧲"
-                Messages.caution_msg = "\n\n⚠️<i><b> Torrents Are Strictly Prohibited in Google Colab</b>, Try to avoid Magnets !</i>"
-            elif is_ytdl_link(link):
-                ida = "🏮"
-            elif is_terabox(link):
-                ida = "🍑"
-            elif is_mega(link):
-                ida = "💾"
-            else:
-                ida = "🔗"
-            code_link = f"\n\n{ida} <code>{link}</code>"
-            if len(Messages.dump_task + code_link) >= 4096:
-                src_text.append(Messages.dump_task)
-                Messages.dump_task = code_link
-            else:
-                Messages.dump_task += code_link
-
-    # Get the current date and time in the specified time zone
-    cdt = datetime.now(pytz.timezone("Asia/Kolkata"))
-    dt = cdt.strftime(" %d-%m-%Y")
-    Messages.dump_task += f"\n\n<b>📆 Task Date » </b><i>{dt}</i>"
-
-    src_text.append(Messages.dump_task)
+        pass
 
     if ospath.exists(Paths.WORK_PATH):
         shutil.rmtree(Paths.WORK_PATH)
